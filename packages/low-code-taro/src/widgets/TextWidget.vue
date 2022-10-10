@@ -3,7 +3,7 @@
  * @Autor: WangYuan1
  * @Date: 2022-10-08 16:43:21
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-10-09 18:59:05
+ * @LastEditTime: 2022-10-10 14:18:25
 -->
 <template>
   <div class="text">{{ value }}</div>
@@ -20,4 +20,10 @@ const props = defineProps({
 </script>
 
 <style lang="scss" scoped>
+.text {
+  padding: 10px 0;
+  text-align: center;
+  font-size: 14px;
+  background: #fff;
+}
 </style>

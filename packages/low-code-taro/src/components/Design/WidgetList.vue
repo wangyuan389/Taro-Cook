@@ -3,16 +3,30 @@
  * @Autor: WangYuan1
  * @Date: 2022-10-09 19:04:30
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-10-09 19:17:35
+ * @LastEditTime: 2022-10-10 16:32:08
 -->
 <template>
-  <div class="widget-list">
-    <draggable v-model="list" item-key="id">
+  <div class="widgets">
+    <draggable
+      group="itxst"
+      v-model="list"
+      item-key="id"
+      animation="300"
+      ghostClass="ghost"
+      :class="list.length ? '' : 'area-empty'"
+    >
       <template #item="{ element }">
-        <div>
-          <component :is="element.component" v-bind="element" />
-          <component is="TextWidget" v-bind="element" />
-        </div>
+        <WidgetShape>
+          <component
+            class="widgets-item"
+            :is="element.component"
+            v-bind="element"
+            @dragover="handleDragOver"
+            @drop="handleDrop"
+          >
+            <WidgetList v-if="element.children" :list="element.children" />
+          </component>
+        </WidgetShape>
       </template>
     </draggable>
   </div>
@@ -21,12 +35,13 @@
 <script>
 import { reactive, toRefs } from "vue";
 import draggable from "vuedraggable";
-import TextWidget from "../../widgets/text.vue";
+import WidgetShape from "./WidgetShape.vue";
+import TextWidget from "../../widgets/TextWidget.vue";
+import BoxWidget from "../../widgets/BoxWidget.vue";
+import { useMove } from "./useMove";
 
 export default {
-  name: "widget-list",
-
-  components: { TextWidget, draggable },
+  components: { WidgetShape, TextWidget, BoxWidget, draggable },
 
   props: {
     list: {
@@ -36,31 +51,82 @@ export default {
   },
 
   setup() {
+    const { moveStatus, setMoveStatus } = useMove();
+
     const state = reactive({
-      msg: "欢迎使用 NutUI3.0 开发小程序",
       msg2: "你成功了～",
-      type: "text",
-      show: false,
-      cover: false,
-      cmp: "Hello",
     });
 
-    const handleClick = (type, msg, cover = false) => {
-      state.show = true;
-      state.msg2 = msg;
-      state.type = type;
-      state.cover = cover;
-    };
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      console.log("handleDragOver", e);
+      console.log("拖拽中...");
+      console.log("组件高度", e.target.offsetHeight);
+      console.log("拖拽位于组件位置", e.offsetY);
+
+      setMoveStatus({
+        id: e.target.getAttribute("id"),
+        location: "top",
+      });
+      console.log("moveStatus", moveStatus);
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      console.log("拖拽完成", e);
+    }
 
     return {
       ...toRefs(state),
-      handleClick,
+      handleDragOver,
+      handleDrop,
     };
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.widget-list {
+.widgets {
+  .widgets-item {
+    user-select: none;
+  }
+  .ghost {
+    position: relative;
+    width: 100%;
+    height: 40px;
+
+    &::before {
+      content: "组件放置";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      line-height: 40px;
+      background: #fafafa;
+      text-align: center;
+      color: #8591a2;
+      z-index: 10000;
+    }
+  }
+
+  .area-empty {
+    position: relative;
+    height: 40px;
+    background: #fafbfc;
+    &::after {
+      content: "拖拽组件到此处";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #8591a2;
+      font-size: 10px;
+    }
+  }
 }
 </style>
