@@ -6,7 +6,9 @@
  * @LastEditTime: 2022-10-10 14:18:25
 -->
 <template>
-  <div class="text">{{ value }}</div>
+  <div class="text">
+    <div>{{ value }}</div>
+  </div>
 </template>
 
 <script setup lang='ts'>

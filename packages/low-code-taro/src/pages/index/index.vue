@@ -7,10 +7,13 @@
 -->
 <template>
   <WidgetList :list="list" />
+  <!-- <div>{{ a }}</div>
+  <div>{{ b }}</div>
+  <div @click="a++">+</div> -->
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import WidgetList from "../../components/Design/WidgetList.vue";
 
 const list: any[] = ref([
@@ -18,11 +21,17 @@ const list: any[] = ref([
   { id: 2, component: "TextWidget", value: "text2" },
   { id: 3, component: "TextWidget", value: "text3" },
   {
-    id: 4,
+    id: 0,
     component: "BoxWidget",
-    children: [{ id: 5, component: "TextWidget", value: "text4" }],
+    children: [{ id: 4, component: "TextWidget", value: "text4" }],
   },
 ]);
+
+// let a = ref(0);
+
+// let b = computed(() => {
+//   return `${a.value}...`;
+// });
 </script>
 
 <style lang="scss" scoped>

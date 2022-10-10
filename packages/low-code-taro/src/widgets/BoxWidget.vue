@@ -21,7 +21,6 @@
 .box {
   border-radius: 10px;
   box-shadow: 1px 1px 6px 0 rgba(12, 31, 80, 0.14);
-  margin-top: 5px;
 
   .box-head {
     height: 30px;

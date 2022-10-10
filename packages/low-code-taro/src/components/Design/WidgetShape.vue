@@ -7,17 +7,35 @@
 -->
 <template>
   <div class="shape">
-    <div class="shape-dashed event-none"></div>
-    {{ moveStatus }}
+    <div class="shape-dashed"></div>
+    <div class="none" :class="moveStyle"></div>
     <slot />
   </div>
 </template>
 
 <script setup lang='ts'>
-import { reactive, toRefs } from "vue";
+import { reactive, toRefs, defineProps, computed } from "vue";
 import { useMove } from "./useMove";
 
+const props = defineProps({
+  widgetId: {
+    type: String,
+  },
+});
+
 const { moveStatus } = useMove();
+
+let moveStyle = computed(() => {
+  if (props.widgetId == moveStatus.id) {
+    if (moveStatus.location == "up") {
+      return "shape-up";
+    } else {
+      return "shape-down";
+    }
+  }
+
+  return "xx";
+});
 </script>
 
 <style lang="scss" scoped>
@@ -40,10 +58,29 @@ const { moveStatus } = useMove();
     bottom: 0;
     border: dashed 1px $theme-color;
     z-index: 100;
+    pointer-events: none;
   }
 
-  .event-none {
-    pointer-events: none;
+  .shape-up {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: $theme-color;
+    z-index: 100;
+  }
+
+  .shape-down {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: $theme-color;
+    z-index: 100;
   }
 
   .shape-solid {
@@ -55,5 +92,9 @@ const { moveStatus } = useMove();
     border: solid 2px $theme-color;
     z-index: 100;
   }
+}
+
+.none {
+  display: none;
 }
 </style>

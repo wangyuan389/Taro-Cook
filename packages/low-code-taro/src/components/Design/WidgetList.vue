@@ -16,7 +16,7 @@
       :class="list.length ? '' : 'area-empty'"
     >
       <template #item="{ element }">
-        <WidgetShape>
+        <WidgetShape :widgetId="element.id">
           <component
             class="widgets-item"
             :is="element.component"
@@ -61,16 +61,22 @@ export default {
       e.preventDefault();
       e.stopPropagation();
 
-      console.log("handleDragOver", e);
-      console.log("拖拽中...");
-      console.log("组件高度", e.target.offsetHeight);
-      console.log("拖拽位于组件位置", e.offsetY);
+      if (e.offsetY) {
+        setMoveStatus({
+          id: e.currentTarget.getAttribute("id"),
+          location: e.offsetY >= e.currentTarget.offsetHeight / 2 ? "downn" : "up",
+        });
+      }
 
-      setMoveStatus({
-        id: e.target.getAttribute("id"),
-        location: "top",
-      });
-      console.log("moveStatus", moveStatus);
+      console.log("handleDragOver", e);
+      console.log("组件高度", e.currentTarget.offsetHeight);
+      console.log("拖拽位于组件位置", e.currentTarget.offsetY);
+      console.log(" e.currentTarget", e.currentTarget);
+      console.log(
+        "e.currentTarget.getAttribute",
+        e.currentTarget.getAttribute("id")
+      );
+      // console.log("moveStatus", moveStatus);
     }
 
     function handleDrop(e) {

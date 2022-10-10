@@ -7,14 +7,14 @@
  */
 import { ref, toRefs, reactive, computed } from "vue";
 
-let moveStatus = ref<any>({
+let moveStatus = reactive<any>({
   id: "",
   location: "",
 });
 
 const setMoveStatus = (status) => {
-  moveStatus.value = status;
-  console.log("setMoveStatus", moveStatus);
+  moveStatus.id = status.id;
+  moveStatus.location = status.location;
 };
 
 const clearMoveStatus = () => {

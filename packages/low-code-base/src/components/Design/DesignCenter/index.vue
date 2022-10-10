@@ -11,7 +11,7 @@
       id="edit"
       class="edit"
       name="vue3"
-      url="http://192.168.10.70:10086/#/pages/index/index"
+      url="http://192.168.0.104:10086/#/pages/index/index"
       :sync="true"
     ></WujieVue>
   </div>
