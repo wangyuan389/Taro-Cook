@@ -3,10 +3,10 @@
  * @Autor: WangYuan1
  * @Date: 2022-10-10 11:19:27
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-10-10 16:37:45
+ * @LastEditTime: 2022-10-11 17:22:56
 -->
 <template>
-  <div class="shape">
+  <div class="shape" :id="props.widgetId" type="widget">
     <div class="shape-dashed"></div>
     <div class="none" :class="moveStyle"></div>
     <slot />
@@ -15,7 +15,7 @@
 
 <script setup lang='ts'>
 import { reactive, toRefs, defineProps, computed } from "vue";
-import { useMove } from "./useMove";
+import { useDesign } from "./useDesign";
 
 const props = defineProps({
   widgetId: {
@@ -23,10 +23,10 @@ const props = defineProps({
   },
 });
 
-const { moveStatus } = useMove();
+const { moveStatus } = useDesign();
 
 let moveStyle = computed(() => {
-  if (props.widgetId == moveStatus.id) {
+  if (moveStatus.id == props.widgetId && moveStatus?.type == "widget") {
     if (moveStatus.location == "up") {
       return "shape-up";
     } else {
@@ -34,7 +34,7 @@ let moveStyle = computed(() => {
     }
   }
 
-  return "xx";
+  return "";
 });
 </script>
 

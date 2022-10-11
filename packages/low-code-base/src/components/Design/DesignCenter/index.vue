@@ -3,7 +3,7 @@
  * @Autor: WangYuan1
  * @Date: 2022-10-08 15:14:20
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-10-09 16:32:09
+ * @LastEditTime: 2022-10-11 09:30:40
 -->
 <template>
   <div class="design-center">
@@ -11,7 +11,7 @@
       id="edit"
       class="edit"
       name="vue3"
-      url="http://192.168.0.104:10086/#/pages/index/index"
+      url="http://192.168.10.70:10086/#/pages/index/index"
       :sync="true"
     ></WujieVue>
   </div>

@@ -3,83 +3,83 @@
  * @Autor: WangYuan1
  * @Date: 2022-10-09 19:04:30
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-10-11 17:20:24
+ * @LastEditTime: 2022-10-11 17:17:48
 -->
 <template>
-  <div class="widgets" type="page">
+  <div class="area" type="area" :id="widget.children" :class="inMoveArea">
     <draggable
       group="itxst"
-      v-model="list"
+      v-model="widget.children"
       item-key="id"
       animation="300"
       ghostClass="ghost"
-      :class="list.length ? '' : 'area-empty'"
+      :class="widget.children.length ? '' : 'area-empty'"
       @dragover="moveWidget"
-      @drop="handleDrop"
     >
       <template #item="{ element }">
         <WidgetShape :widgetId="element.id">
           <component
-            class="widgets-item"
+            class="area-item"
             :is="element.component"
             v-bind="element"
             type="widget"
           >
-            <WidgetNestList v-if="element.children" :widget="element" />
+            <WidgetList v-if="element.children" :widget="element" />
           </component>
         </WidgetShape>
       </template>
     </draggable>
-    {{ moveStatus }}
   </div>
 </template>
 
 <script>
-import { reactive, toRefs } from "vue";
+import { reactive, toRefs, computed, defineProps } from "vue";
 import draggable from "vuedraggable";
 import WidgetShape from "./WidgetShape.vue";
 import TextWidget from "../../widgets/TextWidget.vue";
 import BoxWidget from "../../widgets/BoxWidget.vue";
 import { useDesign } from "./useDesign";
-import WidgetNestList from "./WidgetNestList.vue";
 
 export default {
-  components: { WidgetNestList, WidgetShape, TextWidget, BoxWidget, draggable },
+  components: { WidgetShape, TextWidget, BoxWidget, draggable },
 
   props: {
-    list: {
-      type: Array,
-      default: () => [],
+    widget: {
+      type: Object,
+      default: () => {},
     },
   },
 
-  setup() {
+  setup(props) {
     const { moveStatus, moveWidget } = useDesign();
 
-    const state = reactive({
-      msg2: "你成功了～",
+    let inMoveArea = computed(() => {
+      console.log("inMoveArea......", moveStatus);
+      console.log("props", props);
+      console.log("props?.widget?.id", props?.widget?.id);
+      if (props?.widget?.id == moveStatus?.id && moveStatus?.type == "area") {
+        return "move";
+      }
+
+      return "";
     });
 
-    function handleDrop(e) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      console.log("拖拽完成", e);
-    }
-
     return {
-      ...toRefs(state),
       moveStatus,
-      handleDrop,
       moveWidget,
+      inMoveArea,
     };
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.widgets {
-  .widgets-item {
+@import "../../style/variable";
+
+.area {
+  position: relative;
+
+  .area-item {
     user-select: none;
   }
   .ghost {
@@ -115,6 +115,18 @@ export default {
       color: #8591a2;
       font-size: 10px;
     }
+  }
+}
+
+.move {
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: $theme-color;
   }
 }
 </style>
