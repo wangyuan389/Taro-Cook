@@ -3,11 +3,11 @@
  * @Autor: WangYuan1
  * @Date: 2022-10-08 16:43:21
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-10-10 14:18:25
+ * @LastEditTime: 2022-10-12 09:51:05
 -->
 <template>
   <div class="text">
-    <div>{{ value }}</div>
+    <div style="background: #ccc">{{ value }}</div>
   </div>
 </template>
 
@@ -23,7 +23,7 @@ const props = defineProps({
 
 <style lang="scss" scoped>
 .text {
-  padding: 10px 0;
+  padding: 30px 0;
   text-align: center;
   font-size: 14px;
   background: #fff;

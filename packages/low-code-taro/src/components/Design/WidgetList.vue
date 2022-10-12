@@ -3,7 +3,7 @@
  * @Autor: WangYuan1
  * @Date: 2022-10-09 19:04:30
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-10-11 17:20:24
+ * @LastEditTime: 2022-10-12 10:29:25
 -->
 <template>
   <div class="widgets" type="page">
@@ -14,11 +14,13 @@
       animation="300"
       ghostClass="ghost"
       :class="list.length ? '' : 'area-empty'"
-      @dragover="moveWidget"
-      @drop="handleDrop"
     >
       <template #item="{ element }">
-        <WidgetShape :widgetId="element.id">
+        <WidgetShape
+          :widgetId="element.id"
+          @dragover="moveWidget"
+          @drop="handleDrop"
+        >
           <component
             class="widgets-item"
             :is="element.component"

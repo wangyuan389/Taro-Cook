@@ -3,7 +3,7 @@
  * @Autor: WangYuan1
  * @Date: 2022-10-10 15:57:42
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-10-11 17:11:36
+ * @LastEditTime: 2022-10-12 10:38:52
  */
 import { ref, toRefs, reactive, computed } from "vue";
 
@@ -16,6 +16,9 @@ let moveStatus = reactive<any>({
 const moveWidget = (e) => {
   e.preventDefault();
   e.stopPropagation();
+
+  console.log('拖拽物料');
+  
 
   // if (e.offsetY) {
   //   moveStatus.id = e.currentTarget.getAttribute("id");
@@ -32,28 +35,43 @@ const moveWidget = (e) => {
   //   "e.currentTarget.getAttribute",
   //   e.currentTarget.getAttribute("id")
   // );
-  console.log("查找物料：" + getTargerNode(e.target));
+
+  let node: any = getTargerNode(e.target);
+  console.log("node", node);
+
+  if (node) {
+    let type = node.getAttribute("type");
+
+    moveStatus.type = type;
+    moveStatus.id = node.getAttribute("id");
+
+    if (type == "widget") {
+      console.log("e", e);
+      console.log("拖拽位于组件位置x", e.offsetX);
+      console.log("拖拽位于组件位置", e.offsetY);
+      console.log("拖拽位于容器位置", e.pageY);
+      console.log("物料高度", node.offsetHeight);
+      moveStatus.location = e.offsetY >= node.offsetHeight / 2 ? "downn" : "up";
+    }
+  }
 };
 
-function getTargerNode(event) {
-  let result = null;
+function getTargerNode(node) {
+  let targetNode = null;
 
-  const isTargerNode = (event) => {
-    console.log("event..", event);
-    if (!event) return;
+  const isTargerNode = (node) => {
+    if (!node) return;
 
-    let type = event.getAttribute("type");
-    if (type) {
-      moveStatus.type = type;
-      moveStatus.id = event.getAttribute("id");
+    if (node.getAttribute("type")) {
+      targetNode = node;
     } else {
-      isTargerNode(event.parentNode);
+      isTargerNode(node.parentNode);
     }
   };
 
-  isTargerNode(event);
+  isTargerNode(node);
 
-  return result;
+  return targetNode;
 }
 
 export const useDesign = () => ({
